@@ -1,0 +1,40 @@
+services:
+  app:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      REDIS_HOST: redis
+      PORT: ${PORT}
+    ports:
+      - ${PORT}:${PORT}
+    networks:
+      - nest-starter-net
+    depends_on:
+      - redis
+
+  redis:
+    image: bitnami/redis:7.4
+    restart: always
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_PORT_NUMBER: ${REDIS_PORT}
+      REDIS_DB: ${REDIS_DB}
+      REDIS_IO_THREADS: 4
+      REDIS_IO_THREADS_DO_READS: yes
+      REDIS_DISABLE_COMMANDS: FLUSHDB,FLUSHALL
+    volumes:
+      - nest-starter-redis-data:/bitnami/redis/data
+    networks:
+      - nest-starter-net
+
+volumes:
+  nest-starter-redis-data:
+    driver: local
+
+networks:
+  nest-starter-net:
+    driver: bridge
