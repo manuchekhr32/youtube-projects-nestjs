@@ -5,34 +5,33 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      REDIS_HOST: redis
+      DB_HOST: postgres
       PORT: ${PORT}
     ports:
       - ${PORT}:${PORT}
     networks:
       - nest-starter-net
     depends_on:
-      - redis
+      - postgres
 
-  redis:
-    image: bitnami/redis:7.4
+  postgres:
+    image: 'bitnami/postgresql:17'
     restart: always
-    ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
     environment:
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      REDIS_PORT_NUMBER: ${REDIS_PORT}
-      REDIS_DB: ${REDIS_DB}
-      REDIS_IO_THREADS: 4
-      REDIS_IO_THREADS_DO_READS: yes
-      REDIS_DISABLE_COMMANDS: FLUSHDB,FLUSHALL
-    volumes:
-      - nest-starter-redis-data:/bitnami/redis/data
+      POSTGRESQL_PORT_NUMBER: ${DB_PORT}
+      POSTGRESQL_USERNAME: ${DB_USER}
+      POSTGRESQL_PASSWORD: ${DB_PASSWORD}
+      POSTGRESQL_DATABASE: ${DB_NAME}
+      POSTGRESQL_TIMEZONE: 'Asia/Tashkent'
+    ports:
+      - ${DB_PORT}:${DB_PORT}
     networks:
       - nest-starter-net
+    volumes:
+      - nest-starter-postgres-data:/bitnami/postgresql
 
 volumes:
-  nest-starter-redis-data:
+  nest-starter-postgres-data:
     driver: local
 
 networks:
