@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 import { EnvVars } from './shared/enum/env';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -11,6 +12,8 @@ import { EnvVars } from './shared/enum/env';
         [EnvVars.PORT]: Joi.number(),
         [EnvVars.SWAGGER]: Joi.bool(),
         [EnvVars.CORS]: Joi.string(),
+        [EnvVars.JWT_ACCESS_SECRET]: Joi.string(),
+        [EnvVars.JWT_REFRESH_SECRET]: Joi.string(),
         // Postgres
         [EnvVars.DB_USER]: Joi.string(),
         [EnvVars.DB_PASSWORD]: Joi.string(),
@@ -23,6 +26,7 @@ import { EnvVars } from './shared/enum/env';
         abortEarly: true,
       },
     }),
+    AuthModule,
   ],
 })
 export class AppModule {}

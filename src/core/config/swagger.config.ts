@@ -9,6 +9,7 @@ export class SwaggerConfig {
     .setDescription('API docs')
     .setVersion('1.0.0')
     .setVersion('1')
+    .addBearerAuth()
     .build();
 
   constructor(app: INestApplication) {
